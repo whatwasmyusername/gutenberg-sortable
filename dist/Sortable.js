@@ -80,8 +80,12 @@ var Sortable = function (_Component) {
                     { className: (0, _classnames2.default)('components-sortable', className) },
                     children.map(function (child, index) {
 
-                        child.props['tabindex'] = '0';
-                        child.props['onKeyDown'] = _this2.onKeyDown;
+                        if (child.props["tabindex"]) {
+                            child.props['tabindex'] = '0';
+                        }
+                        if (child.props["onKeyDown"]) {
+                            child.props['onKeyDown'] = _this2.onKeyDown;
+                        }
 
                         //generate a SortableElement using the item and the child
                         var SortableItem = (0, _reactSortableHoc.SortableElement)(function () {
@@ -118,6 +122,7 @@ var Sortable = function (_Component) {
                 wp.element.createElement(SortableList, {
                     axis: this.getAxis(),
                     items: items,
+                    useDragHandle: this.getUseDragHandle(),
                     onSortStart: this.onSortStart,
                     onSortEnd: this.onSortEnd
                 })
@@ -130,7 +135,7 @@ var Sortable = function (_Component) {
 
         /**
          * What to do on sort start ?
-         * 
+         *
          * @param Object
          */
 
@@ -149,8 +154,8 @@ var Sortable = function (_Component) {
 
         /**
          * What to do on sort end?
-         * 
-         * @param Object holding old and new indexes and the collection 
+         *
+         * @param Object holding old and new indexes and the collection
          */
 
     }, {
@@ -187,6 +192,14 @@ var Sortable = function (_Component) {
             }
 
             return this.props.axis;
+        }
+    }, {
+        key: 'getUseDragHandle',
+        value: function getUseDragHandle() {
+            if (typeof this.props.useDragHandle == 'undefined') {
+                return false;
+            }
+            return this.props.useDragHandle === true;
         }
 
         /*************************************/
@@ -232,8 +245,8 @@ var Sortable = function (_Component) {
 
         /**
          * Get the index of a child
-         * 
-         * @param Element child 
+         *
+         * @param Element child
          */
 
     }, {

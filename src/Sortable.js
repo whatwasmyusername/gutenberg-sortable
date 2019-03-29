@@ -14,7 +14,7 @@ class Sortable extends Component {
 
         this.onSortStart = this.onSortStart.bind(this);
         this.onSortEnd = this.onSortEnd.bind(this);
-        this.onKeyDown = this.onKeyDown.bind(this);
+		this.onKeyDown = this.onKeyDown.bind(this);
     }
 
 
@@ -33,8 +33,12 @@ class Sortable extends Component {
                 <div className={classnames('components-sortable', className)}>
                     {children.map((child, index) => {
 
-                        child.props['tabindex'] = '0';
-                        child.props['onKeyDown'] = this.onKeyDown;
+						if (child.props["tabindex"]){
+							child.props['tabindex'] = '0';
+						}
+						if (child.props["onKeyDown"]){
+							child.props['onKeyDown'] = this.onKeyDown;
+						}
 
                         //generate a SortableElement using the item and the child
                         let SortableItem = SortableElement(() => {
@@ -71,7 +75,8 @@ class Sortable extends Component {
             //return the sortable list, with props from our upper-lever component
             <SortableList
                 axis={this.getAxis()}
-                items={items}
+				items={items}
+				useDragHandle={this.getUseDragHandle()}
                 onSortStart={this.onSortStart}
                 onSortEnd={this.onSortEnd}
             />
@@ -84,7 +89,7 @@ class Sortable extends Component {
 
     /**
      * What to do on sort start ?
-     * 
+     *
      * @param Object
      */
     onSortStart({ node, index, collection }, event) {
@@ -96,8 +101,8 @@ class Sortable extends Component {
 
     /**
      * What to do on sort end?
-     * 
-     * @param Object holding old and new indexes and the collection 
+     *
+     * @param Object holding old and new indexes and the collection
      */
     onSortEnd({ oldIndex, newIndex }) {
 
@@ -128,6 +133,13 @@ class Sortable extends Component {
         return this.props.axis;
     }
 
+
+	getUseDragHandle() {
+		if (typeof(this.props.useDragHandle) == 'undefined'){
+			return false;
+		}
+		return this.props.useDragHandle === true;
+	}
 
 
 
@@ -169,8 +181,8 @@ class Sortable extends Component {
 
     /**
      * Get the index of a child
-     * 
-     * @param Element child 
+     *
+     * @param Element child
      */
     getIndex(child) {
         const parent = child.parentNode;
